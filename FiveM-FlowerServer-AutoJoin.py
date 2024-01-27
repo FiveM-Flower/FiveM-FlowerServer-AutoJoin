@@ -1,9 +1,5 @@
-import configparser
-import requests, time, webbrowser, psutil, os
+import time, psutil, requests, webbrowser, configparser
 from discord_webhook import DiscordWebhook
-
-
-config = configparser.ConfigParser()
 
 
 def checkFiveM():
@@ -17,15 +13,14 @@ def checkFiveM():
 def logPrint(text):
     print(text)
     if config['USER_CONFIG']['WEBHOOK_URL'] != "NONE":
-        print(config['USER_CONFIG']['WEBHOOK_URL'])
         webhook = DiscordWebhook(
             url=config['USER_CONFIG']['WEBHOOK_URL'], 
             content=f"{text}"
         )
-        response = webhook.execute()
-        print("전송 완료")
+        webhook.execute()
 
 
+config = configparser.ConfigParser()
 logPrint(f"{config.read('Config.ini')[0]}의 읽기가 완료 되었습니다.")
 logPrint("FLOWER 접속기가 자동으로 접속 되었습니다.")
 
