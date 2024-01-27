@@ -3,6 +3,12 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# User
+*.zip
+*.ini
+*.bak
+*.exe
+
 # C extensions
 *.so
 
@@ -24,8 +30,6 @@ share/python-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
-*.bak
-*.ini
 MANIFEST
 
 # PyInstaller
