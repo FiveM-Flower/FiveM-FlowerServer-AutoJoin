@@ -1,5 +1,7 @@
 import configparser
 import requests, time, webbrowser, psutil, os
+from discord_webhook import DiscordWebhook
+
 
 config = configparser.ConfigParser()
 
@@ -12,8 +14,20 @@ def checkFiveM():
     return False
 
 
-print(f"{config.read('Config.ini')[0]}의 읽기가 완료 되었습니다.")
-print("FLOWER 접속기가 자동으로 접속 되었습니다.")
+def logPrint(text):
+    print(text)
+    if config['USER_CONFIG']['WEBHOOK_URL'] != "NONE":
+        print(config['USER_CONFIG']['WEBHOOK_URL'])
+        webhook = DiscordWebhook(
+            url=config['USER_CONFIG']['WEBHOOK_URL'], 
+            content=f"{text}"
+        )
+        response = webhook.execute()
+        print("전송 완료")
+
+
+logPrint(f"{config.read('Config.ini')[0]}의 읽기가 완료 되었습니다.")
+logPrint("FLOWER 접속기가 자동으로 접속 되었습니다.")
 
 
 while True:
@@ -21,7 +35,7 @@ while True:
     if response.status_code == 200:
         resultCheckFiveM = checkFiveM()
         if resultCheckFiveM == False:
-            print("서버에 접속을 시도 합니다.")
+            logPrint("서버에 접속을 시도 합니다.")
             webbrowser.open(str(config['ADMIN_CONFIG']['SERVER_IP']))
             time.sleep(10)
             continue
@@ -30,5 +44,5 @@ while True:
             continue
 
     else:
-        print(f"{config['USER_CONFIG']['RECONNECT_TIME']}초 뒤 재접속을 시도 합니다.")
+        logPrint(f"{config['USER_CONFIG']['RECONNECT_TIME']}초 뒤 재접속을 시도 합니다.")
         time.sleep(float(config['USER_CONFIG']['RECONNECT_TIME']))
